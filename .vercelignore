@@ -1,0 +1,16 @@
+# Exclude files not needed for the static deployment
+__pycache__/
+.pytest_cache/
+.git/
+tests/
+scratch/
+reports/
+*.pyc
+*.pyo
+build_stlite.py
+requirements-python.txt
+CAPSTONE_MASTER_PROJECT_REPORT.md
+IMPLEMENTATION_REPORT.md
+FINAL_EXPERIMENT_AND_SUMMARY_RESULTS.md
+LICENSE
+README.md
