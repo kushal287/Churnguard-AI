@@ -142,19 +142,3 @@ def render_benchmark_view():
             """,
             unsafe_allow_html=True,
         )
-
-    st.markdown("---")
-
-    # Comparison Figures
-    st.markdown("### 📈 Visual Comparison Figures")
-    v_col1, v_col2 = st.columns(2)
-
-    with v_col1:
-        roc_pr_fig = FIGURES_DIR / "roc_pr_curves_comparison.png"
-        if roc_pr_fig.exists():
-            st.image(str(roc_pr_fig), caption="Overlaid ROC & PR Curves (Custom NumPy vs Sklearn)", use_container_width=True)
-
-    with v_col2:
-        cm_fig = FIGURES_DIR / "confusion_matrices.png"
-        if cm_fig.exists():
-            st.image(str(cm_fig), caption="Side-by-Side Confusion Matrices (N = 1,057)", use_container_width=True)

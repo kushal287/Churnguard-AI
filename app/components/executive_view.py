@@ -210,19 +210,3 @@ def render_executive_view():
             """,
             unsafe_allow_html=True,
         )
-
-    st.markdown("---")
-
-    # 5. Exploratory Data Visualizations
-    st.markdown("### 📈 Visual Distribution Evidence")
-    eda_col1, eda_col2 = st.columns(2)
-
-    with eda_col1:
-        churn_dist_fig = FIGURES_DIR / "eda_churn_distribution.png"
-        if churn_dist_fig.exists():
-            st.image(str(churn_dist_fig), caption="Customer Churn Class Distribution (IBM Telco Dataset)", use_container_width=True)
-
-    with eda_col2:
-        heatmap_fig = FIGURES_DIR / "eda_correlation_heatmap.png"
-        if heatmap_fig.exists():
-            st.image(str(heatmap_fig), caption="Feature Correlation Heatmap with Churn Target", use_container_width=True)
