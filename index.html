@@ -317,7 +317,7 @@
       stepWasm.className = "step-badge done";
       stepNumpy.className = "step-badge active";
       
-      const manifestResp = await fetch("./stlite_build/manifest.json");
+      const manifestResp = await fetch("./stlite_build/manifest.json?t=" + Date.now(), { cache: "no-store" });
       const manifest = await manifestResp.json();
 
       // Step 3: Parse files
