@@ -654,7 +654,25 @@ def render_user_dataset_view():
             mask = df_table.astype(str).apply(lambda row: row.str.contains(search_txt, case=False).any(), axis=1)
             df_table = df_table[mask]
 
-        st.dataframe(df_table.astype(str), use_container_width=True)
+        # Paginated observation preview
+        total_matching = len(df_table)
+        page_size = 15
+        max_pages = max(1, (total_matching + page_size - 1) // page_size)
+
+        col_p1, col_p2 = st.columns([3, 1])
+        with col_p1:
+            st.caption(f"Showing **{min(total_matching, page_size)}** of **{total_matching:,}** matching observations:")
+        with col_p2:
+            if max_pages > 1:
+                page_num = st.number_input("Page:", min_value=1, max_value=max_pages, value=1, step=1, key="custom_pred_page")
+            else:
+                page_num = 1
+
+        start_idx = (page_num - 1) * page_size
+        end_idx = min(total_matching, start_idx + page_size)
+        df_page = df_table.iloc[start_idx:end_idx]
+
+        st.table(df_page.astype(str))
 
         # Export Predictions CSV
         export_csv_data = df_scored.to_csv(index=False)
