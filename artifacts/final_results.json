@@ -2,7 +2,7 @@
   "metadata": {
     "project_title": "ChurnGuard AI \u2014 Explainable Customer Churn Prediction & Retention Intelligence Platform",
     "experiment_status": "FROZEN_FINAL_AUTHORITATIVE",
-    "timestamp_utc": "2026-08-30T16:23:14.034795+00:00",
+    "timestamp_utc": "2026-08-30T16:29:45.512796+00:00",
     "software_versions": {
       "python": "3.11.9",
       "numpy": "2.4.4",
@@ -207,8 +207,8 @@
       "false_positives": 200,
       "true_negatives": 576,
       "false_negatives": 67,
-      "training_time_ms": 33.76,
-      "inference_latency_ms_per_1k": 0.216
+      "training_time_ms": 18.15,
+      "inference_latency_ms_per_1k": 0.121
     }
   },
   "mathematical_fidelity": {
@@ -216,8 +216,8 @@
     "weight_cosine_similarity": 0.5585,
     "weight_pearson_correlation": 0.5479,
     "weight_mean_absolute_difference": 0.243,
-    "custom_inference_latency_ms_per_1k": 0.043,
-    "custom_training_time_ms": 517.99
+    "custom_inference_latency_ms_per_1k": 0.022,
+    "custom_training_time_ms": 298.73
   },
   "illustrative_business_cost_model": {
     "disclaimer": "Illustrative business assumptions only for capstone ROI demonstration.",
@@ -234,11 +234,11 @@
       "test_samples": 1057,
       "features_count": 41,
       "decision_threshold": 0.5,
-      "timestamp": "2026-08-30 21:53:11"
+      "timestamp": "2026-08-30 21:59:42"
     },
     "custom_numpy_model": {
-      "training_time_ms": 517.99,
-      "inference_latency_ms_per_1k": 0.043,
+      "training_time_ms": 298.73,
+      "inference_latency_ms_per_1k": 0.022,
       "epochs_trained": 175,
       "best_epoch": 125,
       "train_metrics": {
@@ -321,8 +321,8 @@
       }
     },
     "sklearn_benchmark_model": {
-      "training_time_ms": 33.76,
-      "inference_latency_ms_per_1k": 0.216,
+      "training_time_ms": 18.15,
+      "inference_latency_ms_per_1k": 0.121,
       "solver": "lbfgs",
       "train_metrics": {
         "threshold": 0.5,
