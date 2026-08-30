@@ -9,6 +9,9 @@
   <link rel="shortcut icon" type="image/x-icon" href="./app/assets/favicon.ico" />
   <link rel="apple-touch-icon" href="./app/assets/logo.png" />
 
+  <!-- Streamlit / Stlite Stylesheet -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/browser@1.8.1/build/style.css" />
+
   <style>
     /* Critical Inline CSS - Zero network delay, immediate first paint */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,7 +34,7 @@
       justify-content: center;
       background: radial-gradient(circle at 50% 20%, #FFFFFF 0%, #F0F7FF 60%, #E0F2FE 100%);
       padding: 24px;
-      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     }
     #loading-screen.fade-out {
       opacity: 0;
@@ -114,7 +117,7 @@
 
     .progress-fill {
       height: 100%;
-      width: 5%;
+      width: 10%;
       background: linear-gradient(90deg, #2563EB 0%, #06B6D4 100%);
       border-radius: 8px;
       transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -188,14 +191,6 @@
       width: 100vw;
     }
   </style>
-
-  <!-- Non-blocking style injection for stlite -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/@stlite/browser@1.8.1/build/style.css"
-    media="print"
-    onload="this.media='all'"
-  />
 </head>
 <body>
   <!-- Instant Loading Screen with Live Progress Indicator -->
@@ -252,15 +247,52 @@
 
     function setProgress(pct, msg) {
       if (progressBar) progressBar.style.width = pct + "%";
-      if (progressPercent) progressPercent.textContent = pct + "%";
+      if (progressPercent) progressPercent.textContent = Math.round(pct) + "%";
       if (statusMsg && msg) statusMsg.textContent = msg;
     }
+
+    function dismissLoadingScreen() {
+      if (!loadingScreen || loadingScreen.style.display === "none") return;
+      clearInterval(progressInterval);
+      clearInterval(safetyInterval);
+      if (observer) observer.disconnect();
+
+      stepWasm.className = "step-badge done";
+      stepNumpy.className = "step-badge done";
+      stepData.className = "step-badge done";
+      stepUi.className = "step-badge done";
+      setProgress(100, "Dashboard Ready!");
+
+      setTimeout(() => {
+        loadingScreen.classList.add("fade-out");
+        setTimeout(() => {
+          loadingScreen.style.display = "none";
+        }, 400);
+      }, 250);
+    }
+
+    // Set up MutationObserver to detect when Streamlit creates elements in #root
+    const observer = new MutationObserver(() => {
+      const root = document.getElementById("root");
+      if (root && (root.children.length > 0 || document.querySelector(".stApp") || document.querySelector('[data-testid="stApp"]'))) {
+        dismissLoadingScreen();
+      }
+    });
+    observer.observe(document.getElementById("root"), { childList: true, subtree: true });
+
+    // Periodic check fallback
+    const safetyInterval = setInterval(() => {
+      const root = document.getElementById("root");
+      if (root && (root.children.length > 0 || document.querySelector(".stApp") || document.querySelector('[data-testid="stApp"]'))) {
+        dismissLoadingScreen();
+      }
+    }, 200);
 
     // Smooth progress simulation for initial loading
     let currentPct = 15;
     const progressInterval = setInterval(() => {
-      if (currentPct < 85) {
-        currentPct += 2;
+      if (currentPct < 92) {
+        currentPct += (95 - currentPct) * 0.08;
         if (currentPct > 30 && currentPct < 55) {
           stepWasm.className = "step-badge done";
           stepNumpy.className = "step-badge active";
@@ -273,7 +305,7 @@
         }
         setProgress(currentPct);
       }
-    }, 180);
+    }, 200);
 
     try {
       // Step 1: Import stlite from CDN
@@ -306,7 +338,7 @@
         files[path] = { data: bytes };
       }
 
-      // Step 4: Mount application
+      // Step 4: Mount application into DOM
       setProgress(85, "Starting ChurnGuard AI engine...");
       stepData.className = "step-badge done";
       stepUi.className = "step-badge active";
@@ -323,32 +355,14 @@
           entrypoint: "app/streamlit_app.py",
           files: files,
         },
-        document.getElementById("root"),
-        {
-          onProgress: (progress) => {
-            if (progress && progress.text) {
-              statusMsg.textContent = progress.text;
-            }
-          },
-          onLoad: () => {
-            clearInterval(progressInterval);
-            stepUi.className = "step-badge done";
-            setProgress(100, "Engine Ready! Launching dashboard...");
-            setTimeout(() => {
-              loadingScreen.classList.add("fade-out");
-              setTimeout(() => {
-                loadingScreen.style.display = "none";
-              }, 500);
-            }, 300);
-          },
-        }
+        document.getElementById("root")
       );
+
+      // Dismiss as soon as mount finishes
+      dismissLoadingScreen();
     } catch (err) {
-      clearInterval(progressInterval);
       console.error("Boot error:", err);
-      if (statusMsg) {
-        statusMsg.textContent = "Loading error. Retrying...";
-      }
+      dismissLoadingScreen();
     }
   </script>
 </body>
