@@ -23,6 +23,8 @@ from app.components.single_prediction_view import render_single_prediction_view
 from app.components.user_dataset_view import render_user_dataset_view
 from src.utils.integrity import verify_artifact_integrity
 
+from PIL import Image
+
 LOGO_PATH = BASE_DIR / "app" / "assets" / "logo.png"
 
 
@@ -34,17 +36,24 @@ def get_logo_base64() -> str:
     return ""
 
 
-# Set Streamlit Page Configuration
+# Set Streamlit Page Configuration with Branded Logo Favicon
+app_icon = Image.open(LOGO_PATH) if LOGO_PATH.exists() else "🛡️"
 st.set_page_config(
     page_title="ChurnGuard AI — Explainable Retention Intelligence",
-    page_icon=str(LOGO_PATH) if LOGO_PATH.exists() else "🛡️",
+    page_icon=app_icon,
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # Light Enterprise AI Analytics Design System (Vanilla CSS)
+logo_b64 = get_logo_base64()
 st.markdown(
-    """
+    f"""
+    <head>
+        <link rel="icon" type="image/png" href="data:image/png;base64,{logo_b64}">
+        <link rel="shortcut icon" type="image/png" href="data:image/png;base64,{logo_b64}">
+        <link rel="apple-touch-icon" href="data:image/png;base64,{logo_b64}">
+    </head>
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
     
