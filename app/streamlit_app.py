@@ -11,7 +11,51 @@ from pathlib import Path
 # Add project root to sys.path
 BASE_DIR = Path(__file__).resolve().parent.parent
 if str(BASE_DIR) not in sys.path:
-    sys.path.insert(0, str(BASE_DIR))
+# Pyodide / WebAssembly environment polyfill for PyArrow RecordBatch compatibility
+try:
+    import pyarrow as pa
+    if not hasattr(pa, "RecordBatch"):
+        try:
+            import pyarrow.lib as _palib
+            if hasattr(_palib, "RecordBatch"):
+                pa.RecordBatch = _palib.RecordBatch
+            else:
+                class _RecordBatchStub:
+                    @classmethod
+                    def from_pandas(cls, *args, **kwargs):
+                        return None
+                    @classmethod
+                    def from_arrays(cls, *args, **kwargs):
+                        return None
+                pa.RecordBatch = _RecordBatchStub
+        except Exception:
+            class _RecordBatchStub:
+                @classmethod
+                def from_pandas(cls, *args, **kwargs):
+                    return None
+                @classmethod
+                def from_arrays(cls, *args, **kwargs):
+                    return None
+            pa.RecordBatch = _RecordBatchStub
+    if not hasattr(pa, "Table"):
+        try:
+            import pyarrow.lib as _palib
+            if hasattr(_palib, "Table"):
+                pa.Table = _palib.Table
+            else:
+                class _TableStub:
+                    @classmethod
+                    def from_pandas(cls, *args, **kwargs):
+                        return None
+                pa.Table = _TableStub
+        except Exception:
+            class _TableStub:
+                @classmethod
+                def from_pandas(cls, *args, **kwargs):
+                    return None
+            pa.Table = _TableStub
+except Exception:
+    pass
 
 import streamlit as st
 
