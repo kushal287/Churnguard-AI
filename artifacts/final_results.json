@@ -1,0 +1,992 @@
+{
+  "metadata": {
+    "project_title": "ChurnGuard AI \u2014 Explainable Customer Churn Prediction & Retention Intelligence Platform",
+    "experiment_status": "FROZEN_FINAL_AUTHORITATIVE",
+    "timestamp_utc": "2026-08-30T05:13:07.223325+00:00",
+    "software_versions": {
+      "python": "3.11.9",
+      "numpy": "2.4.4",
+      "pandas": "3.0.5",
+      "scikit_learn": "1.9.0",
+      "scipy": "1.17.1",
+      "platform": "Windows-10-10.0.26200-SP0"
+    }
+  },
+  "dataset_info": {
+    "raw_filename": "telco_customer_churn.csv",
+    "sha256_checksum": "16320c9c1ec72448db59aa0a26a0b95401046bef5d02fd3aeb906448e3055e91",
+    "total_records": 7043,
+    "total_columns": 21,
+    "target_column": "Churn",
+    "target_counts": {
+      "No": 5174,
+      "Yes": 1869
+    },
+    "target_proportions": {
+      "No": 0.7346301292063041,
+      "Yes": 0.2653698707936959
+    },
+    "whitespace_totalcharges_imputed": 11
+  },
+  "split_protocol": {
+    "random_state": 42,
+    "train_ratio": 0.7,
+    "val_ratio": 0.15,
+    "test_ratio": 0.15,
+    "train_samples": 4930,
+    "val_samples": 1056,
+    "test_samples": 1057,
+    "train_churn_rate": 0.2653144016227181,
+    "val_churn_rate": 0.26515151515151514,
+    "test_churn_rate": 0.26584673604541154,
+    "customer_id_overlap": 0
+  },
+  "feature_engineering": {
+    "raw_feature_count": 21,
+    "domain_features_added": 9,
+    "total_encoded_features": 41,
+    "feature_names": [
+      "tenure",
+      "MonthlyCharges",
+      "TotalCharges",
+      "monthly_to_total_ratio",
+      "monthly_charge_discrepancy",
+      "total_services_count",
+      "protection_services_count",
+      "streaming_services_count",
+      "has_internet",
+      "is_solo_senior",
+      "high_risk_fiber_m2m",
+      "gender_Male",
+      "SeniorCitizen_1",
+      "Partner_Yes",
+      "Dependents_Yes",
+      "PhoneService_Yes",
+      "MultipleLines_No phone service",
+      "MultipleLines_Yes",
+      "InternetService_Fiber optic",
+      "InternetService_No",
+      "OnlineSecurity_No internet service",
+      "OnlineSecurity_Yes",
+      "OnlineBackup_No internet service",
+      "OnlineBackup_Yes",
+      "DeviceProtection_No internet service",
+      "DeviceProtection_Yes",
+      "TechSupport_No internet service",
+      "TechSupport_Yes",
+      "StreamingTV_No internet service",
+      "StreamingTV_Yes",
+      "StreamingMovies_No internet service",
+      "StreamingMovies_Yes",
+      "Contract_One year",
+      "Contract_Two year",
+      "PaperlessBilling_Yes",
+      "PaymentMethod_Credit card (automatic)",
+      "PaymentMethod_Electronic check",
+      "PaymentMethod_Mailed check",
+      "tenure_cohort_13-24m",
+      "tenure_cohort_25-48m",
+      "tenure_cohort_49-72m"
+    ]
+  },
+  "random_seeds": {
+    "dataset_split_seed": 42,
+    "model_init_seed": 42,
+    "batch_shuffling_seed": 42,
+    "sklearn_seed": 42
+  },
+  "custom_model_hyperparameters": {
+    "learning_rate": 0.05,
+    "max_iter": 1500,
+    "l2_lambda": 0.01,
+    "momentum": 0.9,
+    "batch_size": 64,
+    "early_stopping": true,
+    "patience": 50,
+    "tolerance": 1e-06,
+    "use_class_weights": true,
+    "class_weights": {
+      "0": 0.680563224737714,
+      "1": 1.8845565749235473
+    }
+  },
+  "training_telemetry": {
+    "total_epochs_run": 175,
+    "best_epoch": 125,
+    "best_val_loss": 0.4792750437080787,
+    "final_train_loss": 0.4764024989573915,
+    "trained_bias": -0.027011637950830454,
+    "weight_l2_norm": 2.1721259809241182
+  },
+  "threshold_selection": {
+    "selection_dataset": "validation_set_only",
+    "search_range": [
+      0.01,
+      0.99
+    ],
+    "search_step": 0.01,
+    "optimization_objective": "maximum_f1_score",
+    "selected_optimal_threshold": 0.5800000000000001,
+    "validation_f1_at_optimal": 0.6414523449319213,
+    "default_threshold": 0.5
+  },
+  "custom_numpy_model_test_metrics": {
+    "at_default_threshold_0_50": {
+      "threshold": 0.5,
+      "accuracy": 0.7540208136234626,
+      "precision": 0.5261845386533666,
+      "recall": 0.7508896797153025,
+      "specificity": 0.7551546391752577,
+      "f1_score": 0.6187683284457477,
+      "roc_auc": 0.8451590417140551,
+      "pr_auc": 0.6693574029754786,
+      "confusion_matrix": [
+        [
+          586,
+          190
+        ],
+        [
+          70,
+          211
+        ]
+      ],
+      "true_positives": 211,
+      "false_positives": 190,
+      "true_negatives": 586,
+      "false_negatives": 70,
+      "illustrative_net_retention_savings": 64350.0
+    },
+    "at_validation_optimal_threshold": {
+      "threshold": 0.5800000000000001,
+      "accuracy": 0.7814569536423841,
+      "precision": 0.5735294117647058,
+      "recall": 0.693950177935943,
+      "specificity": 0.8131443298969072,
+      "f1_score": 0.6280193236714975,
+      "roc_auc": 0.8451590417140551,
+      "pr_auc": 0.6693574029754786,
+      "confusion_matrix": [
+        [
+          631,
+          145
+        ],
+        [
+          86,
+          195
+        ]
+      ],
+      "true_positives": 195,
+      "false_positives": 145,
+      "true_negatives": 631,
+      "false_negatives": 86,
+      "illustrative_net_retention_savings": 61000.0
+    }
+  },
+  "sklearn_benchmark_test_metrics": {
+    "estimator": "sklearn.linear_model.LogisticRegression(C=100.0, class_weight='balanced', solver='lbfgs', max_iter=1500)",
+    "at_default_threshold_0_50": {
+      "threshold": 0.5,
+      "accuracy": 0.7473982970671712,
+      "precision": 0.5169082125603864,
+      "recall": 0.7615658362989324,
+      "specificity": 0.7422680412371134,
+      "f1_score": 0.6158273381294963,
+      "roc_auc": 0.8449251568404447,
+      "pr_auc": 0.6687226757052971,
+      "confusion_matrix": [
+        [
+          576,
+          200
+        ],
+        [
+          67,
+          214
+        ]
+      ],
+      "true_positives": 214,
+      "false_positives": 200,
+      "true_negatives": 576,
+      "false_negatives": 67,
+      "training_time_ms": 19.22,
+      "inference_latency_ms_per_1k": 0.12
+    }
+  },
+  "mathematical_fidelity": {
+    "prediction_probability_correlation": 0.9982,
+    "weight_cosine_similarity": 0.5585,
+    "weight_pearson_correlation": 0.5479,
+    "weight_mean_absolute_difference": 0.243,
+    "custom_inference_latency_ms_per_1k": 0.021,
+    "custom_training_time_ms": 312.71
+  },
+  "illustrative_business_cost_model": {
+    "disclaimer": "Illustrative business assumptions only for capstone ROI demonstration.",
+    "cost_false_negative_missed_churn": 500.0,
+    "cost_false_positive_wasted_intervention": 50.0,
+    "gain_true_positive_retained_net_value": 350.0,
+    "gain_true_negative_organic_continuation": 0.0
+  },
+  "benchmark_results": {
+    "metadata": {
+      "dataset": "IBM Telco Customer Churn",
+      "train_samples": 4930,
+      "val_samples": 1056,
+      "test_samples": 1057,
+      "features_count": 41,
+      "decision_threshold": 0.5,
+      "timestamp": "2026-08-30 10:43:04"
+    },
+    "custom_numpy_model": {
+      "training_time_ms": 312.71,
+      "inference_latency_ms_per_1k": 0.021,
+      "epochs_trained": 175,
+      "best_epoch": 125,
+      "train_metrics": {
+        "threshold": 0.5,
+        "accuracy": 0.7604462474645031,
+        "precision": 0.5327488396080454,
+        "recall": 0.7897553516819572,
+        "specificity": 0.7498619547211486,
+        "f1_score": 0.6362796427471512,
+        "roc_auc": 0.8515710354831247,
+        "pr_auc": 0.6721785639768337,
+        "confusion_matrix": [
+          [
+            2716,
+            906
+          ],
+          [
+            275,
+            1033
+          ]
+        ],
+        "true_positives": 1033,
+        "false_positives": 906,
+        "true_negatives": 2716,
+        "false_negatives": 275,
+        "net_retention_savings": 316250.0,
+        "roi_per_customer": 64.14807302231237
+      },
+      "val_metrics": {
+        "threshold": 0.5,
+        "accuracy": 0.7490530303030303,
+        "precision": 0.5170842824601367,
+        "recall": 0.8107142857142857,
+        "specificity": 0.7268041237113402,
+        "f1_score": 0.631432545201669,
+        "roc_auc": 0.8495972938144329,
+        "pr_auc": 0.6550112442895633,
+        "confusion_matrix": [
+          [
+            564,
+            212
+          ],
+          [
+            53,
+            227
+          ]
+        ],
+        "true_positives": 227,
+        "false_positives": 212,
+        "true_negatives": 564,
+        "false_negatives": 53,
+        "net_retention_savings": 68850.0,
+        "roi_per_customer": 65.19886363636364
+      },
+      "test_metrics": {
+        "threshold": 0.5,
+        "accuracy": 0.7540208136234626,
+        "precision": 0.5261845386533666,
+        "recall": 0.7508896797153025,
+        "specificity": 0.7551546391752577,
+        "f1_score": 0.6187683284457477,
+        "roc_auc": 0.8451590417140551,
+        "pr_auc": 0.6693574029754786,
+        "confusion_matrix": [
+          [
+            586,
+            190
+          ],
+          [
+            70,
+            211
+          ]
+        ],
+        "true_positives": 211,
+        "false_positives": 190,
+        "true_negatives": 586,
+        "false_negatives": 70,
+        "net_retention_savings": 64350.0,
+        "roi_per_customer": 60.879848628193
+      }
+    },
+    "sklearn_benchmark_model": {
+      "training_time_ms": 19.22,
+      "inference_latency_ms_per_1k": 0.12,
+      "solver": "lbfgs",
+      "train_metrics": {
+        "threshold": 0.5,
+        "accuracy": 0.7565922920892495,
+        "precision": 0.5271356783919598,
+        "recall": 0.8019877675840978,
+        "specificity": 0.7401987852015461,
+        "f1_score": 0.6361431170406306,
+        "roc_auc": 0.8520389963137267,
+        "pr_auc": 0.6734329427858847,
+        "confusion_matrix": [
+          [
+            2681,
+            941
+          ],
+          [
+            259,
+            1049
+          ]
+        ],
+        "true_positives": 1049,
+        "false_positives": 941,
+        "true_negatives": 2681,
+        "false_negatives": 259,
+        "net_retention_savings": 320100.0,
+        "roi_per_customer": 64.9290060851927
+      },
+      "val_metrics": {
+        "threshold": 0.5,
+        "accuracy": 0.7452651515151515,
+        "precision": 0.512249443207127,
+        "recall": 0.8214285714285714,
+        "specificity": 0.7177835051546392,
+        "f1_score": 0.6310013717421125,
+        "roc_auc": 0.8486630154639175,
+        "pr_auc": 0.6541323799093164,
+        "confusion_matrix": [
+          [
+            557,
+            219
+          ],
+          [
+            50,
+            230
+          ]
+        ],
+        "true_positives": 230,
+        "false_positives": 219,
+        "true_negatives": 557,
+        "false_negatives": 50,
+        "net_retention_savings": 69550.0,
+        "roi_per_customer": 65.86174242424242
+      },
+      "test_metrics": {
+        "threshold": 0.5,
+        "accuracy": 0.7473982970671712,
+        "precision": 0.5169082125603864,
+        "recall": 0.7615658362989324,
+        "specificity": 0.7422680412371134,
+        "f1_score": 0.6158273381294963,
+        "roc_auc": 0.8449251568404447,
+        "pr_auc": 0.6687226757052971,
+        "confusion_matrix": [
+          [
+            576,
+            200
+          ],
+          [
+            67,
+            214
+          ]
+        ],
+        "true_positives": 214,
+        "false_positives": 200,
+        "true_negatives": 576,
+        "false_negatives": 67,
+        "net_retention_savings": 64900.0,
+        "roi_per_customer": 61.400189214758754
+      }
+    },
+    "mathematical_fidelity": {
+      "weight_pearson_correlation": 0.5479,
+      "weight_cosine_similarity": 0.5585,
+      "weight_mean_absolute_difference": 0.243,
+      "bias_difference": 0.6156,
+      "prediction_probability_correlation": 0.9982
+    }
+  },
+  "optimal_threshold": 0.5800000000000001,
+  "optimal_f1_score": 0.6414523449319213,
+  "feature_importance_summary": [
+    {
+      "Feature": "Contract_Two year",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Month-to-month Contract",
+      "Weight (Log-Odds)": -1.4089,
+      "Odds Ratio": 0.2444,
+      "% Change in Odds": -75.56,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'Contract_Two year' is associated with approximately 75.6% lower modeled churn odds (OR = 0.2444) relative to Month-to-month Contract, holding other model inputs constant.",
+      "Absolute Importance": 1.4089,
+      "Std Error": 0.1767,
+      "Wald Z-Score": -7.97,
+      "P-Value": 0.0
+    },
+    {
+      "Feature": "tenure",
+      "Feature Type": "Standardized Numerical",
+      "Reference Category": "N/A (Standardized)",
+      "Weight (Log-Odds)": -0.8546,
+      "Odds Ratio": 0.4255,
+      "% Change in Odds": -57.45,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "A 1-standard-deviation increase in tenure is associated with approximately 57.5% lower modeled churn odds (OR = 0.4255), holding other model inputs constant.",
+      "Absolute Importance": 0.8546,
+      "Std Error": 0.2346,
+      "Wald Z-Score": -3.64,
+      "P-Value": 0.00027
+    },
+    {
+      "Feature": "Contract_One year",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Month-to-month Contract",
+      "Weight (Log-Odds)": -0.6381,
+      "Odds Ratio": 0.5283,
+      "% Change in Odds": -47.17,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'Contract_One year' is associated with approximately 47.2% lower modeled churn odds (OR = 0.5283) relative to Month-to-month Contract, holding other model inputs constant.",
+      "Absolute Importance": 0.6381,
+      "Std Error": 0.1392,
+      "Wald Z-Score": -4.58,
+      "P-Value": 0.0
+    },
+    {
+      "Feature": "TotalCharges",
+      "Feature Type": "Standardized Numerical",
+      "Reference Category": "N/A (Standardized)",
+      "Weight (Log-Odds)": 0.5048,
+      "Odds Ratio": 1.6567,
+      "% Change in Odds": 65.67,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "A 1-standard-deviation increase in TotalCharges is associated with approximately +65.7% higher modeled churn odds (OR = 1.6567), holding other model inputs constant.",
+      "Absolute Importance": 0.5048,
+      "Std Error": 0.1873,
+      "Wald Z-Score": 2.7,
+      "P-Value": 0.00703
+    },
+    {
+      "Feature": "PhoneService_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Phone Service",
+      "Weight (Log-Odds)": -0.3936,
+      "Odds Ratio": 0.6746,
+      "% Change in Odds": -32.54,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'PhoneService_Yes' is associated with approximately 32.5% lower modeled churn odds (OR = 0.6746) relative to No Phone Service, holding other model inputs constant.",
+      "Absolute Importance": 0.3936,
+      "Std Error": 53.5406,
+      "Wald Z-Score": -0.01,
+      "P-Value": 0.99413
+    },
+    {
+      "Feature": "PaperlessBilling_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Paper Billing (PaperlessBilling=No)",
+      "Weight (Log-Odds)": 0.3787,
+      "Odds Ratio": 1.4604,
+      "% Change in Odds": 46.04,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'PaperlessBilling_Yes' is associated with approximately +46.0% higher modeled churn odds (OR = 1.4604) relative to Paper Billing (PaperlessBilling=No), holding other model inputs constant.",
+      "Absolute Importance": 0.3787,
+      "Std Error": 0.0816,
+      "Wald Z-Score": 4.64,
+      "P-Value": 0.0
+    },
+    {
+      "Feature": "PaymentMethod_Electronic check",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Bank transfer (automatic)",
+      "Weight (Log-Odds)": 0.3463,
+      "Odds Ratio": 1.4138,
+      "% Change in Odds": 41.38,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'PaymentMethod_Electronic check' is associated with approximately +41.4% higher modeled churn odds (OR = 1.4138) relative to Bank transfer (automatic), holding other model inputs constant.",
+      "Absolute Importance": 0.3463,
+      "Std Error": 0.1031,
+      "Wald Z-Score": 3.36,
+      "P-Value": 0.00079
+    },
+    {
+      "Feature": "monthly_charge_discrepancy",
+      "Feature Type": "Standardized Numerical",
+      "Reference Category": "N/A (Standardized)",
+      "Weight (Log-Odds)": 0.32,
+      "Odds Ratio": 1.3771,
+      "% Change in Odds": 37.71,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "A 1-standard-deviation increase in monthly_charge_discrepancy is associated with approximately +37.7% higher modeled churn odds (OR = 1.3771), holding other model inputs constant.",
+      "Absolute Importance": 0.32,
+      "Std Error": 0.0684,
+      "Wald Z-Score": 4.68,
+      "P-Value": 0.0
+    },
+    {
+      "Feature": "tenure_cohort_13-24m",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "New Subscriber (0-12m cohort)",
+      "Weight (Log-Odds)": -0.3117,
+      "Odds Ratio": 0.7322,
+      "% Change in Odds": -26.78,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'tenure_cohort_13-24m' is associated with approximately 26.8% lower modeled churn odds (OR = 0.7322) relative to New Subscriber (0-12m cohort), holding other model inputs constant.",
+      "Absolute Importance": 0.3117,
+      "Std Error": 0.1509,
+      "Wald Z-Score": -2.06,
+      "P-Value": 0.03896
+    },
+    {
+      "Feature": "tenure_cohort_25-48m",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "New Subscriber (0-12m cohort)",
+      "Weight (Log-Odds)": -0.2916,
+      "Odds Ratio": 0.7471,
+      "% Change in Odds": -25.29,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'tenure_cohort_25-48m' is associated with approximately 25.3% lower modeled churn odds (OR = 0.7471) relative to New Subscriber (0-12m cohort), holding other model inputs constant.",
+      "Absolute Importance": 0.2916,
+      "Std Error": 0.2311,
+      "Wald Z-Score": -1.26,
+      "P-Value": 0.2071
+    },
+    {
+      "Feature": "streaming_services_count",
+      "Feature Type": "Standardized Numerical",
+      "Reference Category": "N/A (Standardized)",
+      "Weight (Log-Odds)": 0.2887,
+      "Odds Ratio": 1.3347,
+      "% Change in Odds": 33.47,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "A 1-standard-deviation increase in streaming_services_count is associated with approximately +33.5% higher modeled churn odds (OR = 1.3347), holding other model inputs constant.",
+      "Absolute Importance": 0.2887,
+      "Std Error": 55.6959,
+      "Wald Z-Score": 0.01,
+      "P-Value": 0.99586
+    },
+    {
+      "Feature": "MultipleLines_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Single Phone Line",
+      "Weight (Log-Odds)": 0.287,
+      "Odds Ratio": 1.3324,
+      "% Change in Odds": 33.24,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'MultipleLines_Yes' is associated with approximately +33.2% higher modeled churn odds (OR = 1.3324) relative to Single Phone Line, holding other model inputs constant.",
+      "Absolute Importance": 0.287,
+      "Std Error": 32.8927,
+      "Wald Z-Score": 0.01,
+      "P-Value": 0.99304
+    },
+    {
+      "Feature": "InternetService_Fiber optic",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "DSL Internet",
+      "Weight (Log-Odds)": 0.2544,
+      "Odds Ratio": 1.2896,
+      "% Change in Odds": 28.96,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'InternetService_Fiber optic' is associated with approximately +29.0% higher modeled churn odds (OR = 1.2896) relative to DSL Internet, holding other model inputs constant.",
+      "Absolute Importance": 0.2544,
+      "Std Error": 0.8849,
+      "Wald Z-Score": 0.29,
+      "P-Value": 0.77376
+    },
+    {
+      "Feature": "protection_services_count",
+      "Feature Type": "Standardized Numerical",
+      "Reference Category": "N/A (Standardized)",
+      "Weight (Log-Odds)": -0.2268,
+      "Odds Ratio": 0.7971,
+      "% Change in Odds": -20.29,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "A 1-standard-deviation increase in protection_services_count is associated with approximately 20.3% lower modeled churn odds (OR = 0.7971), holding other model inputs constant.",
+      "Absolute Importance": 0.2268,
+      "Std Error": 62.7233,
+      "Wald Z-Score": -0.0,
+      "P-Value": 0.99712
+    },
+    {
+      "Feature": "OnlineSecurity_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Online Security (with Internet)",
+      "Weight (Log-Odds)": -0.2139,
+      "Odds Ratio": 0.8074,
+      "% Change in Odds": -19.26,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'OnlineSecurity_Yes' is associated with approximately 19.3% lower modeled churn odds (OR = 0.8074) relative to No Online Security (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.2139,
+      "Std Error": 36.4301,
+      "Wald Z-Score": -0.01,
+      "P-Value": 0.99532
+    },
+    {
+      "Feature": "Dependents_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Dependents",
+      "Weight (Log-Odds)": -0.2098,
+      "Odds Ratio": 0.8108,
+      "% Change in Odds": -18.92,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'Dependents_Yes' is associated with approximately 18.9% lower modeled churn odds (OR = 0.8108) relative to No Dependents, holding other model inputs constant.",
+      "Absolute Importance": 0.2098,
+      "Std Error": 0.0958,
+      "Wald Z-Score": -2.19,
+      "P-Value": 0.02859
+    },
+    {
+      "Feature": "SeniorCitizen_1",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Non-Senior (SeniorCitizen=0)",
+      "Weight (Log-Odds)": 0.2054,
+      "Odds Ratio": 1.228,
+      "% Change in Odds": 22.8,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'SeniorCitizen_1' is associated with approximately +22.8% higher modeled churn odds (OR = 1.2280) relative to Non-Senior (SeniorCitizen=0), holding other model inputs constant.",
+      "Absolute Importance": 0.2054,
+      "Std Error": 0.141,
+      "Wald Z-Score": 1.46,
+      "P-Value": 0.1453
+    },
+    {
+      "Feature": "MultipleLines_No phone service",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Multiple Lines (Single line)",
+      "Weight (Log-Odds)": 0.1673,
+      "Odds Ratio": 1.1822,
+      "% Change in Odds": 18.22,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'MultipleLines_No phone service' is associated with approximately +18.2% higher modeled churn odds (OR = 1.1822) relative to No Multiple Lines (Single line), holding other model inputs constant.",
+      "Absolute Importance": 0.1673,
+      "Std Error": 64.6257,
+      "Wald Z-Score": 0.0,
+      "P-Value": 0.99793
+    },
+    {
+      "Feature": "StreamingTV_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Streaming TV (with Internet)",
+      "Weight (Log-Odds)": -0.1657,
+      "Odds Ratio": 0.8473,
+      "% Change in Odds": -15.27,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'StreamingTV_Yes' is associated with approximately 15.3% lower modeled churn odds (OR = 0.8473) relative to No Streaming TV (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.1657,
+      "Std Error": 54.338,
+      "Wald Z-Score": -0.0,
+      "P-Value": 0.99757
+    },
+    {
+      "Feature": "DeviceProtection_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Device Protection (with Internet)",
+      "Weight (Log-Odds)": 0.1512,
+      "Odds Ratio": 1.1632,
+      "% Change in Odds": 16.32,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'DeviceProtection_Yes' is associated with approximately +16.3% higher modeled churn odds (OR = 1.1632) relative to No Device Protection (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.1512,
+      "Std Error": 36.4301,
+      "Wald Z-Score": 0.0,
+      "P-Value": 0.99669
+    },
+    {
+      "Feature": "MonthlyCharges",
+      "Feature Type": "Standardized Numerical",
+      "Reference Category": "N/A (Standardized)",
+      "Weight (Log-Odds)": 0.147,
+      "Odds Ratio": 1.1583,
+      "% Change in Odds": 15.83,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "A 1-standard-deviation increase in MonthlyCharges is associated with approximately +15.8% higher modeled churn odds (OR = 1.1583), holding other model inputs constant.",
+      "Absolute Importance": 0.147,
+      "Std Error": 1.0512,
+      "Wald Z-Score": 0.14,
+      "P-Value": 0.88879
+    },
+    {
+      "Feature": "TechSupport_No internet service",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Tech Support (with Internet)",
+      "Weight (Log-Odds)": -0.143,
+      "Odds Ratio": 0.8667,
+      "% Change in Odds": -13.33,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'TechSupport_No internet service' is associated with approximately 13.3% lower modeled churn odds (OR = 0.8667) relative to No Tech Support (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.143,
+      "Std Error": 95.6859,
+      "Wald Z-Score": -0.0,
+      "P-Value": 0.99881
+    },
+    {
+      "Feature": "tenure_cohort_49-72m",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "New Subscriber (0-12m cohort)",
+      "Weight (Log-Odds)": -0.1367,
+      "Odds Ratio": 0.8723,
+      "% Change in Odds": -12.77,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'tenure_cohort_49-72m' is associated with approximately 12.8% lower modeled churn odds (OR = 0.8723) relative to New Subscriber (0-12m cohort), holding other model inputs constant.",
+      "Absolute Importance": 0.1367,
+      "Std Error": 0.3816,
+      "Wald Z-Score": -0.36,
+      "P-Value": 0.72021
+    },
+    {
+      "Feature": "TechSupport_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Tech Support (with Internet)",
+      "Weight (Log-Odds)": -0.1325,
+      "Odds Ratio": 0.8759,
+      "% Change in Odds": -12.41,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'TechSupport_Yes' is associated with approximately 12.4% lower modeled churn odds (OR = 0.8759) relative to No Tech Support (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.1325,
+      "Std Error": 36.4301,
+      "Wald Z-Score": -0.0,
+      "P-Value": 0.9971
+    },
+    {
+      "Feature": "high_risk_fiber_m2m",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Non-Fiber or Non-Month-to-Month Contract",
+      "Weight (Log-Odds)": 0.1281,
+      "Odds Ratio": 1.1367,
+      "% Change in Odds": 13.67,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'high_risk_fiber_m2m' is associated with approximately +13.7% higher modeled churn odds (OR = 1.1367) relative to Non-Fiber or Non-Month-to-Month Contract, holding other model inputs constant.",
+      "Absolute Importance": 0.1281,
+      "Std Error": 0.0856,
+      "Wald Z-Score": 1.5,
+      "P-Value": 0.13468
+    },
+    {
+      "Feature": "InternetService_No",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "DSL Internet",
+      "Weight (Log-Odds)": -0.1071,
+      "Odds Ratio": 0.8984,
+      "% Change in Odds": -10.16,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'InternetService_No' is associated with approximately 10.2% lower modeled churn odds (OR = 0.8984) relative to DSL Internet, holding other model inputs constant.",
+      "Absolute Importance": 0.1071,
+      "Std Error": 95.6859,
+      "Wald Z-Score": -0.0,
+      "P-Value": 0.99911
+    },
+    {
+      "Feature": "OnlineBackup_No internet service",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Online Backup (with Internet)",
+      "Weight (Log-Odds)": -0.1068,
+      "Odds Ratio": 0.8987,
+      "% Change in Odds": -10.13,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'OnlineBackup_No internet service' is associated with approximately 10.1% lower modeled churn odds (OR = 0.8987) relative to No Online Backup (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.1068,
+      "Std Error": 95.6859,
+      "Wald Z-Score": -0.0,
+      "P-Value": 0.99911
+    },
+    {
+      "Feature": "total_services_count",
+      "Feature Type": "Standardized Numerical",
+      "Reference Category": "N/A (Standardized)",
+      "Weight (Log-Odds)": -0.0884,
+      "Odds Ratio": 0.9154,
+      "% Change in Odds": -8.46,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "A 1-standard-deviation increase in total_services_count is associated with approximately 8.5% lower modeled churn odds (OR = 0.9154), holding other model inputs constant.",
+      "Absolute Importance": 0.0884,
+      "Std Error": 68.3808,
+      "Wald Z-Score": -0.0,
+      "P-Value": 0.99897
+    },
+    {
+      "Feature": "has_internet",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Internet Service",
+      "Weight (Log-Odds)": 0.0875,
+      "Odds Ratio": 1.0915,
+      "% Change in Odds": 9.15,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'has_internet' is associated with approximately +9.1% higher modeled churn odds (OR = 1.0915) relative to No Internet Service, holding other model inputs constant.",
+      "Absolute Importance": 0.0875,
+      "Std Error": 69.7073,
+      "Wald Z-Score": 0.0,
+      "P-Value": 0.999
+    },
+    {
+      "Feature": "monthly_to_total_ratio",
+      "Feature Type": "Standardized Numerical",
+      "Reference Category": "N/A (Standardized)",
+      "Weight (Log-Odds)": -0.0666,
+      "Odds Ratio": 0.9356,
+      "% Change in Odds": -6.44,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "A 1-standard-deviation increase in monthly_to_total_ratio is associated with approximately 6.4% lower modeled churn odds (OR = 0.9356), holding other model inputs constant.",
+      "Absolute Importance": 0.0666,
+      "Std Error": 0.0473,
+      "Wald Z-Score": -1.41,
+      "P-Value": 0.15902
+    },
+    {
+      "Feature": "gender_Male",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Female",
+      "Weight (Log-Odds)": 0.0507,
+      "Odds Ratio": 1.0521,
+      "% Change in Odds": 5.21,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'gender_Male' is associated with approximately +5.2% higher modeled churn odds (OR = 1.0521) relative to Female, holding other model inputs constant.",
+      "Absolute Importance": 0.0507,
+      "Std Error": 0.0734,
+      "Wald Z-Score": 0.69,
+      "P-Value": 0.48932
+    },
+    {
+      "Feature": "DeviceProtection_No internet service",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Device Protection (with Internet)",
+      "Weight (Log-Odds)": -0.0424,
+      "Odds Ratio": 0.9585,
+      "% Change in Odds": -4.15,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'DeviceProtection_No internet service' is associated with approximately 4.2% lower modeled churn odds (OR = 0.9585) relative to No Device Protection (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.0424,
+      "Std Error": 95.6859,
+      "Wald Z-Score": -0.0,
+      "P-Value": 0.99965
+    },
+    {
+      "Feature": "StreamingMovies_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Streaming Movies (with Internet)",
+      "Weight (Log-Odds)": -0.0369,
+      "Odds Ratio": 0.9638,
+      "% Change in Odds": -3.62,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'StreamingMovies_Yes' is associated with approximately 3.6% lower modeled churn odds (OR = 0.9638) relative to No Streaming Movies (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.0369,
+      "Std Error": 54.338,
+      "Wald Z-Score": -0.0,
+      "P-Value": 0.99946
+    },
+    {
+      "Feature": "PaymentMethod_Credit card (automatic)",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Bank transfer (automatic)",
+      "Weight (Log-Odds)": -0.0297,
+      "Odds Ratio": 0.9707,
+      "% Change in Odds": -2.93,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'PaymentMethod_Credit card (automatic)' is associated with approximately 2.9% lower modeled churn odds (OR = 0.9707) relative to Bank transfer (automatic), holding other model inputs constant.",
+      "Absolute Importance": 0.0297,
+      "Std Error": 0.1152,
+      "Wald Z-Score": -0.26,
+      "P-Value": 0.79661
+    },
+    {
+      "Feature": "OnlineSecurity_No internet service",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Online Security (with Internet)",
+      "Weight (Log-Odds)": 0.0187,
+      "Odds Ratio": 1.0189,
+      "% Change in Odds": 1.89,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'OnlineSecurity_No internet service' is associated with approximately +1.9% higher modeled churn odds (OR = 1.0189) relative to No Online Security (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.0187,
+      "Std Error": 95.6859,
+      "Wald Z-Score": 0.0,
+      "P-Value": 0.99984
+    },
+    {
+      "Feature": "is_solo_senior",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Non-Senior or Senior with family",
+      "Weight (Log-Odds)": -0.0185,
+      "Odds Ratio": 0.9816,
+      "% Change in Odds": -1.84,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'is_solo_senior' is associated with approximately 1.8% lower modeled churn odds (OR = 0.9816) relative to Non-Senior or Senior with family, holding other model inputs constant.",
+      "Absolute Importance": 0.0185,
+      "Std Error": 0.0526,
+      "Wald Z-Score": -0.35,
+      "P-Value": 0.72422
+    },
+    {
+      "Feature": "OnlineBackup_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Online Backup (with Internet)",
+      "Weight (Log-Odds)": 0.0178,
+      "Odds Ratio": 1.0179,
+      "% Change in Odds": 1.79,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'OnlineBackup_Yes' is associated with approximately +1.8% higher modeled churn odds (OR = 1.0179) relative to No Online Backup (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.0178,
+      "Std Error": 36.4301,
+      "Wald Z-Score": 0.0,
+      "P-Value": 0.99961
+    },
+    {
+      "Feature": "PaymentMethod_Mailed check",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "Bank transfer (automatic)",
+      "Weight (Log-Odds)": -0.0177,
+      "Odds Ratio": 0.9825,
+      "% Change in Odds": -1.75,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'PaymentMethod_Mailed check' is associated with approximately 1.8% lower modeled churn odds (OR = 0.9825) relative to Bank transfer (automatic), holding other model inputs constant.",
+      "Absolute Importance": 0.0177,
+      "Std Error": 0.1225,
+      "Wald Z-Score": -0.14,
+      "P-Value": 0.88513
+    },
+    {
+      "Feature": "StreamingMovies_No internet service",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Streaming Movies (with Internet)",
+      "Weight (Log-Odds)": 0.017,
+      "Odds Ratio": 1.0172,
+      "% Change in Odds": 1.72,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'StreamingMovies_No internet service' is associated with approximately +1.7% higher modeled churn odds (OR = 1.0172) relative to No Streaming Movies (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.017,
+      "Std Error": 95.6859,
+      "Wald Z-Score": 0.0,
+      "P-Value": 0.99986
+    },
+    {
+      "Feature": "StreamingTV_No internet service",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Streaming TV (with Internet)",
+      "Weight (Log-Odds)": 0.0111,
+      "Odds Ratio": 1.0112,
+      "% Change in Odds": 1.12,
+      "Impact Direction": "Risk Driver (Increases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'StreamingTV_No internet service' is associated with approximately +1.1% higher modeled churn odds (OR = 1.0112) relative to No Streaming TV (with Internet), holding other model inputs constant.",
+      "Absolute Importance": 0.0111,
+      "Std Error": 95.6859,
+      "Wald Z-Score": 0.0,
+      "P-Value": 0.99991
+    },
+    {
+      "Feature": "Partner_Yes",
+      "Feature Type": "Categorical / Binary Indicator",
+      "Reference Category": "No Partner",
+      "Weight (Log-Odds)": -0.0028,
+      "Odds Ratio": 0.9972,
+      "% Change in Odds": -0.28,
+      "Impact Direction": "Retention Anchor (Decreases Churn Odds)",
+      "Statistical Interpretation": "Presence of 'Partner_Yes' is associated with approximately 0.3% lower modeled churn odds (OR = 0.9972) relative to No Partner, holding other model inputs constant.",
+      "Absolute Importance": 0.0028,
+      "Std Error": 0.0958,
+      "Wald Z-Score": -0.03,
+      "P-Value": 0.97672
+    }
+  ]
+}

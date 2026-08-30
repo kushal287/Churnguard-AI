@@ -1,0 +1,185 @@
+{
+  "metadata": {
+    "dataset": "IBM Telco Customer Churn",
+    "train_samples": 4930,
+    "val_samples": 1056,
+    "test_samples": 1057,
+    "features_count": 41,
+    "decision_threshold": 0.5,
+    "timestamp": "2026-08-30 10:43:04"
+  },
+  "custom_numpy_model": {
+    "training_time_ms": 312.71,
+    "inference_latency_ms_per_1k": 0.021,
+    "epochs_trained": 175,
+    "best_epoch": 125,
+    "train_metrics": {
+      "threshold": 0.5,
+      "accuracy": 0.7604462474645031,
+      "precision": 0.5327488396080454,
+      "recall": 0.7897553516819572,
+      "specificity": 0.7498619547211486,
+      "f1_score": 0.6362796427471512,
+      "roc_auc": 0.8515710354831247,
+      "pr_auc": 0.6721785639768337,
+      "confusion_matrix": [
+        [
+          2716,
+          906
+        ],
+        [
+          275,
+          1033
+        ]
+      ],
+      "true_positives": 1033,
+      "false_positives": 906,
+      "true_negatives": 2716,
+      "false_negatives": 275,
+      "net_retention_savings": 316250.0,
+      "roi_per_customer": 64.14807302231237
+    },
+    "val_metrics": {
+      "threshold": 0.5,
+      "accuracy": 0.7490530303030303,
+      "precision": 0.5170842824601367,
+      "recall": 0.8107142857142857,
+      "specificity": 0.7268041237113402,
+      "f1_score": 0.631432545201669,
+      "roc_auc": 0.8495972938144329,
+      "pr_auc": 0.6550112442895633,
+      "confusion_matrix": [
+        [
+          564,
+          212
+        ],
+        [
+          53,
+          227
+        ]
+      ],
+      "true_positives": 227,
+      "false_positives": 212,
+      "true_negatives": 564,
+      "false_negatives": 53,
+      "net_retention_savings": 68850.0,
+      "roi_per_customer": 65.19886363636364
+    },
+    "test_metrics": {
+      "threshold": 0.5,
+      "accuracy": 0.7540208136234626,
+      "precision": 0.5261845386533666,
+      "recall": 0.7508896797153025,
+      "specificity": 0.7551546391752577,
+      "f1_score": 0.6187683284457477,
+      "roc_auc": 0.8451590417140551,
+      "pr_auc": 0.6693574029754786,
+      "confusion_matrix": [
+        [
+          586,
+          190
+        ],
+        [
+          70,
+          211
+        ]
+      ],
+      "true_positives": 211,
+      "false_positives": 190,
+      "true_negatives": 586,
+      "false_negatives": 70,
+      "net_retention_savings": 64350.0,
+      "roi_per_customer": 60.879848628193
+    }
+  },
+  "sklearn_benchmark_model": {
+    "training_time_ms": 19.22,
+    "inference_latency_ms_per_1k": 0.12,
+    "solver": "lbfgs",
+    "train_metrics": {
+      "threshold": 0.5,
+      "accuracy": 0.7565922920892495,
+      "precision": 0.5271356783919598,
+      "recall": 0.8019877675840978,
+      "specificity": 0.7401987852015461,
+      "f1_score": 0.6361431170406306,
+      "roc_auc": 0.8520389963137267,
+      "pr_auc": 0.6734329427858847,
+      "confusion_matrix": [
+        [
+          2681,
+          941
+        ],
+        [
+          259,
+          1049
+        ]
+      ],
+      "true_positives": 1049,
+      "false_positives": 941,
+      "true_negatives": 2681,
+      "false_negatives": 259,
+      "net_retention_savings": 320100.0,
+      "roi_per_customer": 64.9290060851927
+    },
+    "val_metrics": {
+      "threshold": 0.5,
+      "accuracy": 0.7452651515151515,
+      "precision": 0.512249443207127,
+      "recall": 0.8214285714285714,
+      "specificity": 0.7177835051546392,
+      "f1_score": 0.6310013717421125,
+      "roc_auc": 0.8486630154639175,
+      "pr_auc": 0.6541323799093164,
+      "confusion_matrix": [
+        [
+          557,
+          219
+        ],
+        [
+          50,
+          230
+        ]
+      ],
+      "true_positives": 230,
+      "false_positives": 219,
+      "true_negatives": 557,
+      "false_negatives": 50,
+      "net_retention_savings": 69550.0,
+      "roi_per_customer": 65.86174242424242
+    },
+    "test_metrics": {
+      "threshold": 0.5,
+      "accuracy": 0.7473982970671712,
+      "precision": 0.5169082125603864,
+      "recall": 0.7615658362989324,
+      "specificity": 0.7422680412371134,
+      "f1_score": 0.6158273381294963,
+      "roc_auc": 0.8449251568404447,
+      "pr_auc": 0.6687226757052971,
+      "confusion_matrix": [
+        [
+          576,
+          200
+        ],
+        [
+          67,
+          214
+        ]
+      ],
+      "true_positives": 214,
+      "false_positives": 200,
+      "true_negatives": 576,
+      "false_negatives": 67,
+      "net_retention_savings": 64900.0,
+      "roi_per_customer": 61.400189214758754
+    }
+  },
+  "mathematical_fidelity": {
+    "weight_pearson_correlation": 0.5479,
+    "weight_cosine_similarity": 0.5585,
+    "weight_mean_absolute_difference": 0.243,
+    "bias_difference": 0.6156,
+    "prediction_probability_correlation": 0.9982
+  }
+}
