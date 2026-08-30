@@ -323,7 +323,7 @@ def render_user_dataset_view():
         st.metric("Memory Footprint", f"{mem_size_kb:.1f} KB")
 
     st.markdown(f"**First 10 Rows of `{dataset_name}`:**")
-    st.dataframe(df_raw.head(10), use_container_width=True)
+    st.table(df_raw.head(10))
 
     st.markdown("---")
 
@@ -559,11 +559,7 @@ def render_user_dataset_view():
             st.markdown(f"##### 🔺 Top Features Pushing TOWARD `{pos_label}`")
             df_pos = pd.DataFrame(res["feature_importance"]["top_positive"])
             if not df_pos.empty:
-                st.dataframe(
-                    df_pos[["Feature", "Weight (Log-Odds)", "Odds Ratio"]],
-                    use_container_width=True,
-                    hide_index=True,
-                )
+                st.table(df_pos[["Feature", "Weight (Log-Odds)", "Odds Ratio"]])
             else:
                 st.info("No positive coefficients found.")
 
@@ -571,11 +567,7 @@ def render_user_dataset_view():
             st.markdown(f"##### 🔻 Top Features Pushing AWAY from `{pos_label}`")
             df_neg = pd.DataFrame(res["feature_importance"]["top_negative"])
             if not df_neg.empty:
-                st.dataframe(
-                    df_neg[["Feature", "Weight (Log-Odds)", "Odds Ratio"]],
-                    use_container_width=True,
-                    hide_index=True,
-                )
+                st.table(df_neg[["Feature", "Weight (Log-Odds)", "Odds Ratio"]])
             else:
                 st.info("No negative coefficients found.")
 
@@ -616,7 +608,7 @@ def render_user_dataset_view():
             mask = df_table.astype(str).apply(lambda row: row.str.contains(search_txt, case=False).any(), axis=1)
             df_table = df_table[mask]
 
-        st.dataframe(df_table, use_container_width=True)
+        st.dataframe(df_table.astype(str), use_container_width=True)
 
         # Export Predictions CSV
         export_csv_data = df_scored.to_csv(index=False)

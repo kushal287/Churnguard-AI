@@ -259,16 +259,13 @@ def render_single_prediction_view():
         st.markdown("#### 🔴 Top Risk Drivers (Pushes Churn Risk UP)")
         if explanation["risk_drivers"]:
             df_drivers = pd.DataFrame(explanation["risk_drivers"])
-            df_drivers.columns = ["Model Feature", "Transformed Input (x)", "Model Weight (w)", "Log-Odds Contribution (+z)"]
-            st.dataframe(
-                df_drivers.style.format({
-                    "Transformed Input (x)": "{:.3f}",
-                    "Model Weight (w)": "{:+.4f}",
-                    "Log-Odds Contribution (+z)": "+{:.4f}",
-                }),
-                use_container_width=True,
-                hide_index=True,
-            )
+            df_display_drivers = pd.DataFrame({
+                "Model Feature": df_drivers["feature"],
+                "Transformed Input (x)": df_drivers["feature_value"].apply(lambda v: f"{v:.3f}"),
+                "Model Weight (w)": df_drivers["weight"].apply(lambda v: f"{v:+.4f}"),
+                "Log-Odds Contribution (+z)": df_drivers["contribution"].apply(lambda v: f"+{v:.4f}"),
+            })
+            st.table(df_display_drivers)
         else:
             st.info("No substantial positive risk drivers identified for this customer profile.")
 
@@ -276,16 +273,13 @@ def render_single_prediction_view():
         st.markdown("#### 🟢 Top Protective Factors (Pushes Churn Risk DOWN)")
         if explanation["protective_factors"]:
             df_anchors = pd.DataFrame(explanation["protective_factors"])
-            df_anchors.columns = ["Model Feature", "Transformed Input (x)", "Model Weight (w)", "Log-Odds Contribution (-z)"]
-            st.dataframe(
-                df_anchors.style.format({
-                    "Transformed Input (x)": "{:.3f}",
-                    "Model Weight (w)": "{:+.4f}",
-                    "Log-Odds Contribution (-z)": "{:.4f}",
-                }),
-                use_container_width=True,
-                hide_index=True,
-            )
+            df_display_anchors = pd.DataFrame({
+                "Model Feature": df_anchors["feature"],
+                "Transformed Input (x)": df_anchors["feature_value"].apply(lambda v: f"{v:.3f}"),
+                "Model Weight (w)": df_anchors["weight"].apply(lambda v: f"{v:+.4f}"),
+                "Log-Odds Contribution (-z)": df_anchors["contribution"].apply(lambda v: f"{v:.4f}"),
+            })
+            st.table(df_display_anchors)
         else:
             st.info("No substantial protective factors present for this customer profile.")
 
@@ -297,22 +291,17 @@ def render_single_prediction_view():
         "Linear reconstruction demonstrating how the model calculates the final prediction from the prior baseline intercept:"
     )
 
-    df_waterfall = pd.DataFrame(explanation["waterfall_steps"])
-    st.dataframe(
-        df_waterfall[["step", "feature", "feature_value", "log_odds_delta", "cumulative_log_odds", "implied_churn_probability", "direction"]].rename(
-            columns={
-                "step": "Waterfall Step",
-                "feature": "Feature Description",
-                "feature_value": "Transformed Value",
-                "log_odds_delta": "Contribution (Δz)",
-                "cumulative_log_odds": "Cumulative Logit (z)",
-                "implied_churn_probability": "Implied Probability σ(z)",
-                "direction": "Impact Direction",
-            }
-        ),
-        use_container_width=True,
-        hide_index=True,
-    )
+    df_wf_raw = pd.DataFrame(explanation["waterfall_steps"])
+    df_wf_clean = pd.DataFrame({
+        "Waterfall Step": df_wf_raw["step"].astype(str),
+        "Feature Description": df_wf_raw["feature"].astype(str),
+        "Transformed Value": df_wf_raw["feature_value"].apply(lambda v: f"{v:.3f}" if isinstance(v, (int, float)) else str(v)),
+        "Contribution (Δz)": df_wf_raw["log_odds_delta"].apply(lambda v: f"{v:+.4f}"),
+        "Cumulative Logit (z)": df_wf_raw["cumulative_log_odds"].apply(lambda v: f"{v:.4f}"),
+        "Implied Probability σ(z)": df_wf_raw["implied_churn_probability"].apply(lambda v: f"{v:.1%}"),
+        "Impact Direction": df_wf_raw["direction"].astype(str),
+    })
+    st.table(df_wf_clean)
 
     recon = explanation["mathematical_reconstruction"]
     st.markdown(

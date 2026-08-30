@@ -99,7 +99,7 @@ def render_guided_demo_view():
             "Here is an active subscriber profile being evaluated by the platform (Month-to-Month Fiber Optic subscriber):"
         )
         df_profile = pd.DataFrame([sample_customer])
-        st.dataframe(df_profile.T.rename(columns={0: "Customer Attribute Value"}), use_container_width=True)
+        st.table(df_profile.T.rename(columns={0: "Customer Attribute Value"}))
         st.caption("Attributes are standardized and one-hot encoded using the zero-leakage preprocessor fitted on training data.")
 
     elif current_step == 3:
@@ -132,44 +132,55 @@ def render_guided_demo_view():
         )
         X_vec = preprocessor.transform_single_record(sample_customer)
         explanation = explainer.explain_instance(X_vec, top_n=5)
-        df_waterfall = pd.DataFrame(explanation["waterfall_steps"])
-        st.dataframe(
-            df_waterfall[["step", "feature", "feature_value", "log_odds_delta", "cumulative_log_odds", "implied_churn_probability", "direction"]],
-            use_container_width=True,
-            hide_index=True,
-        )
+        df_wf_raw = pd.DataFrame(explanation["waterfall_steps"])
+        df_wf_clean = pd.DataFrame({
+            "Waterfall Step": df_wf_raw["step"].astype(str),
+            "Feature Description": df_wf_raw["feature"].astype(str),
+            "Transformed Value": df_wf_raw["feature_value"].apply(lambda v: f"{v:.3f}" if isinstance(v, (int, float)) else str(v)),
+            "Contribution (Δz)": df_wf_raw["log_odds_delta"].apply(lambda v: f"{v:+.4f}"),
+            "Cumulative Logit (z)": df_wf_raw["cumulative_log_odds"].apply(lambda v: f"{v:.4f}"),
+            "Implied Probability σ(z)": df_wf_raw["implied_churn_probability"].apply(lambda v: f"{v:.1%}"),
+            "Impact Direction": df_wf_raw["direction"].astype(str),
+        })
+        st.table(df_wf_clean)
         recon = explanation["mathematical_reconstruction"]
         st.markdown(
             f"""
             <div style="background: #F0F9FF; border: 1px solid #BAE6FD; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #0369A1; margin-top: 10px;">
                 <strong style="color: #0284C7;">✓ Exact Equivalence Verified:</strong> Direct Model Output = <code style="color: #0369A1; background: #E0F2FE; padding: 2px 6px; border-radius: 4px;">{recon['direct_probability']:.6f}</code> | 
                 Reconstructed Output σ(b + Σw_j x_j) = <code style="color: #0369A1; background: #E0F2FE; padding: 2px 6px; border-radius: 4px;">{recon['reconstructed_probability']:.6f}</code> | 
-                Discrepancy: <code style="color: #16A34A; background: #DCFCE7; padding: 2px 6px; border-radius: 4px;">{recon['discrepancy']:.2e}</code>.
+                Discrepancy: <code style="color: #16A34A; background: #DCFCE7; padding: 2px 6px; border-radius: 4px;">{recon['discrepancy']:.2e}</code> (Exact Equivalence).
             </div>
             """,
             unsafe_allow_html=True,
         )
 
     elif current_step == 5:
-        st.markdown("### 📋 Step 5: Prescriptive Retention Action Playbook")
-        st.markdown("The platform translates identified risk factors into deterministic, cost-modeled retention plays:")
+        st.markdown("### 🎯 Step 5: What Prescriptive Retention Actions Should We Take?")
+        st.markdown("Deterministic, rules-based retention interventions mapped directly from the customer's risk factors:")
         X_vec = preprocessor.transform_single_record(sample_customer)
-        proba = float(model.predict_proba(X_vec)[0, 1])
-        explanation = explainer.explain_instance(X_vec, top_n=5)
-        recs = playbook.generate_recommendations(sample_customer, proba, explanation["risk_drivers"])
+        proba = model.predict_proba(X_vec)
+        churn_prob = float(proba[0, 1])
+        playbook_actions = playbook.generate_recommendations(sample_customer, churn_prob)
 
-        for idx, r in enumerate(recs, 1):
-            p_badge = "🔴 HIGH" if r["priority"] == "HIGH" else ("🟠 MEDIUM" if r["priority"] == "MEDIUM" else "🟢 LOW")
-            border_col = "#DC2626" if r["priority"] == "HIGH" else ("#D97706" if r["priority"] == "MEDIUM" else "#16A34A")
+        for i, action in enumerate(playbook_actions):
+            urgency_border = "#EF4444" if action["urgency"] == "Immediate" else "#F59E0B"
+            urgency_bg = "#FEF2F2" if action["urgency"] == "Immediate" else "#FFFBEB"
+            urgency_color = "#991B1B" if action["urgency"] == "Immediate" else "#92400E"
+
             st.markdown(
                 f"""
-                <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid {border_col}; border-radius: 8px; padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <strong style="color: #0F172A; font-size: 15px;">{idx}. {r['action']}</strong>
-                        <span style="font-size: 11px; font-weight: 700; background: #F1F5F9; padding: 2px 8px; border-radius: 4px; color: {border_col};">{p_badge} PRIORITY</span>
+                <div style="border: 1px solid #E2E8F0; border-left: 4px solid {urgency_border}; border-radius: 10px; padding: 18px 22px; margin-bottom: 14px; background: #FFFFFF; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h4 style="margin: 0; color: #0F172A; font-size: 16px; font-weight: 700;">{action['action_title']}</h4>
+                        <span style="background: {urgency_bg}; color: {urgency_color}; padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 600;">{action['urgency']} Urgency</span>
                     </div>
-                    <span style="font-size: 13.5px; color: #334155; line-height: 1.5;">{r['description']}</span><br>
-                    <div style="font-size: 12.5px; color: #64748B; margin-top: 6px;">Rationale: {r['rationale']} | Cost: {r['financial_cost']}</div>
+                    <p style="margin: 0 0 10px 0; color: #475569; font-size: 14px; line-height: 1.5;">{action['description']}</p>
+                    <div style="display: flex; gap: 18px; font-size: 12px; color: #64748B; border-top: 1px dashed #E2E8F0; padding-top: 8px;">
+                        <span><strong>Trigger Rule:</strong> {action['trigger_feature']}</span>
+                        <span><strong>Target Metric:</strong> {action['target_metric']}</span>
+                        <span><strong>Estimated Impact:</strong> {action['estimated_impact']}</span>
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -187,7 +198,7 @@ def render_guided_demo_view():
             {"Metric": "Probability Correlation (r)", "Custom NumPy LR": "0.9982", "Scikit-Learn LR": "1.0000", "Parity Delta": "Mathematical Parity"},
             {"Metric": "Inference Latency (per 1k)", "Custom NumPy LR": "0.056 ms", "Scikit-Learn LR": "0.222 ms", "Parity Delta": "4.0x Faster"},
         ]
-        st.dataframe(pd.DataFrame(bench_data), use_container_width=True, hide_index=True)
+        st.table(pd.DataFrame(bench_data))
 
     elif current_step == 7:
         st.markdown("### 🚀 Step 7: Operationalizing at Cohort Scale")

@@ -67,13 +67,18 @@ st.markdown(
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
     
     /* Core Typography & Light Theme Canvas */
-    html, body, [class*="css"], .stApp {
+    html, body, .stApp {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
         background-color: #F8FAFC !important;
         color: #0F172A !important;
         letter-spacing: -0.01em;
     }
     
+    /* Ensure icon fonts are never overridden by Inter font */
+    [data-testid="stIconMaterial"], [class*="material-icons"], [class*="material-symbols"], i, [data-testid="stExpanderToggleIcon"] {
+        font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Icons', sans-serif !important;
+    }
+
     code, pre, .mono-font {
         font-family: 'JetBrains Mono', monospace !important;
     }

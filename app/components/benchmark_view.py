@@ -103,7 +103,7 @@ def render_benchmark_view():
     ]
 
     df_comp = pd.DataFrame(comparison_data)
-    st.dataframe(df_comp, use_container_width=True, hide_index=True)
+    st.table(df_comp)
     st.caption("*Illustrative business simulation assumptions for capstone evaluation.")
 
     st.markdown("---")
