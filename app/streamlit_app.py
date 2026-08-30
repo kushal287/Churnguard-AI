@@ -47,6 +47,8 @@ st.set_page_config(
 
 # Light Enterprise AI Analytics Design System (Vanilla CSS)
 logo_b64 = get_logo_base64()
+
+# Inject branded favicon via HTML head tags (f-string needed for base64 variable)
 st.markdown(
     f"""
     <head>
@@ -54,6 +56,13 @@ st.markdown(
         <link rel="shortcut icon" type="image/png" href="data:image/png;base64,{logo_b64}">
         <link rel="apple-touch-icon" href="data:image/png;base64,{logo_b64}">
     </head>
+    """,
+    unsafe_allow_html=True,
+)
+
+# CSS Design System (regular string — no f-string to avoid CSS brace conflicts)
+st.markdown(
+    """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
     

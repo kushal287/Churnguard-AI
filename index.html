@@ -4,226 +4,200 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ChurnGuard AI — Explainable Retention Intelligence</title>
-  <link rel="icon" type="image/png" href="/public/favicon.png" />
-  <link rel="shortcut icon" type="image/x-icon" href="/public/favicon.ico" />
-  <link rel="apple-touch-icon" href="/public/logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <meta name="description" content="Enterprise-grade explainable machine learning platform for customer churn prediction, log-odds waterfall attribution, and data-driven retention intelligence." />
+  <link rel="icon" type="image/png" href="./app/assets/favicon.png" />
+  <link rel="shortcut icon" type="image/x-icon" href="./app/assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="./app/assets/logo.png" />
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@stlite/browser@1.8.1/build/style.css"
+  />
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #F8FAFC;
-      color: #0F172A;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header {
-      background: #FFFFFF;
-      border-bottom: 1px solid #E2E8F0;
-      padding: 16px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      text-decoration: none;
-      color: #0F172A;
-    }
-    .brand img {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      border: 1px solid #BAE6FD;
-      padding: 3px;
-      background: #FFFFFF;
-      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
-    }
-    .brand-text h1 {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      color: #0F172A;
-    }
-    .brand-text p {
-      font-size: 12px;
-      color: #64748B;
-    }
-    .status-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #ECFDF5;
-      border: 1px solid #A7F3D0;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #065F46;
-    }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #16A34A;
-      box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
-    }
-    main {
-      flex: 1;
+    html, body { height: 100%; overflow: hidden; }
+
+    /* Premium loading screen */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
-      text-align: center;
+      background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 50%, #E0F2FE 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      transition: opacity 0.5s ease;
     }
-    .hero-card {
-      background: #FFFFFF;
-      border: 1px solid #E2E8F0;
-      border-radius: 16px;
-      padding: 40px;
-      max-width: 720px;
-      width: 100%;
-      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
-    }
-    .hero-logo {
-      width: 96px;
-      height: 96px;
-      margin: 0 auto 20px auto;
-      border-radius: 16px;
-      border: 1.5px solid #BAE6FD;
+    #loading-screen.fade-out { opacity: 0; pointer-events: none; }
+
+    .loading-logo {
+      width: 88px; height: 88px;
+      border-radius: 18px;
+      border: 2px solid #BAE6FD;
       padding: 8px;
       background: #FFFFFF;
-      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.12);
+      box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12);
+      animation: logoPulse 2s infinite ease-in-out;
     }
-    .hero-title {
-      font-size: 26px;
+
+    @keyframes logoPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12); }
+      50% { transform: scale(1.04); box-shadow: 0 12px 40px rgba(37, 99, 235, 0.2); }
+    }
+
+    .loading-title {
+      margin-top: 22px;
+      font-size: 24px;
       font-weight: 800;
       color: #0F172A;
-      margin-bottom: 10px;
       letter-spacing: -0.5px;
     }
-    .hero-subtitle {
-      font-size: 15px;
+    .loading-subtitle {
+      margin-top: 8px;
+      font-size: 14px;
       color: #475569;
-      line-height: 1.6;
-      margin-bottom: 28px;
     }
-    .features-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 30px;
-      text-align: left;
+
+    .loading-bar-container {
+      margin-top: 28px;
+      width: 280px;
+      height: 6px;
+      background: #E2E8F0;
+      border-radius: 6px;
+      overflow: hidden;
     }
-    .feature-item {
-      background: #F8FAFC;
+    .loading-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2563EB, #06B6D4);
+      border-radius: 6px;
+      animation: loadProgress 12s ease-out forwards;
+    }
+    @keyframes loadProgress {
+      0% { width: 0%; }
+      15% { width: 20%; }
+      40% { width: 45%; }
+      60% { width: 60%; }
+      80% { width: 78%; }
+      95% { width: 90%; }
+      100% { width: 95%; }
+    }
+
+    .loading-status {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #64748B;
+      font-weight: 500;
+    }
+
+    .loading-features {
+      margin-top: 32px;
+      display: flex;
+      gap: 14px;
+    }
+    .loading-feature {
+      background: #FFFFFF;
       border: 1px solid #E2E8F0;
       border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 13px;
-      color: #334155;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-      color: #FFFFFF;
-      font-weight: 600;
-      font-size: 15px;
-      padding: 14px 28px;
-      border-radius: 10px;
-      text-decoration: none;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
-      transition: all 0.2s ease;
-      display: block;
-    }
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
-    }
-    .btn-secondary {
-      background: #FFFFFF;
-      color: #1E293B;
-      border: 1px solid #CBD5E1;
-      font-weight: 600;
-      font-size: 14px;
-      padding: 12px 24px;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      display: block;
-    }
-    .btn-secondary:hover {
-      background: #F8FAFC;
-      border-color: #93C5FD;
-    }
-    footer {
-      border-top: 1px solid #E2E8F0;
-      padding: 18px;
-      text-align: center;
+      padding: 10px 16px;
       font-size: 12px;
-      color: #94A3B8;
-      background: #FFFFFF;
+      color: #334155;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
+
+    /* stlite app container */
+    #root { height: 100vh; }
   </style>
 </head>
 <body>
-  <header>
-    <a href="/" class="brand">
-      <img src="/app/assets/logo.png" alt="ChurnGuard AI Logo" />
-      <div class="brand-text">
-        <h1>ChurnGuard AI</h1>
-        <p>Explainable Retention Intelligence</p>
-      </div>
-    </a>
-    <div class="status-badge">
-      <div class="status-dot"></div>
-      <span>All Systems Operational</span>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <img src="./app/assets/logo.png" alt="ChurnGuard AI" class="loading-logo" />
+    <div class="loading-title">ChurnGuard AI</div>
+    <div class="loading-subtitle">Initializing Explainable ML Engine...</div>
+    <div class="loading-bar-container">
+      <div class="loading-bar"></div>
     </div>
-  </header>
-
-  <main>
-    <div class="hero-card">
-      <img src="/app/assets/logo.png" alt="ChurnGuard AI" class="hero-logo" />
-      <h2 class="hero-title">ChurnGuard AI Production Platform</h2>
-      <p class="hero-subtitle">
-        An enterprise-grade, explainable machine learning platform engineered from first principles in pure NumPy. 
-        Predict subscriber attrition, unpack exact log-odds waterfall attribution, and deploy high-ROI retention playbooks.
-      </p>
-
-      <div class="features-grid">
-        <div class="feature-item">⚙️ Pure NumPy Logistic Regression</div>
-        <div class="feature-item">⚔️ Audited Scikit-Learn Parity (0.8452 ROC)</div>
-        <div class="feature-item">🧬 100% Log-Odds Waterfall Attribution</div>
-        <div class="feature-item">📁 Dynamic Tabular Custom ML Engine</div>
-      </div>
-
-      <div class="btn-group">
-        <a href="https://github.com/kushal287/Churnguard-AI" target="_blank" rel="noopener noreferrer" class="btn-primary">
-          ⭐ View GitHub Repository & Source
-        </a>
-        <a href="https://share.streamlit.io/" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-          🚀 Deploy / Launch on Streamlit Community Cloud
-        </a>
-      </div>
+    <div class="loading-status" id="loading-status">Loading Python runtime...</div>
+    <div class="loading-features">
+      <div class="loading-feature">⚙️ NumPy ML Engine</div>
+      <div class="loading-feature">🧬 Log-Odds Waterfall</div>
+      <div class="loading-feature">📊 Executive Analytics</div>
     </div>
-  </main>
+  </div>
 
-  <footer>
-    © 2026 ChurnGuard AI. Major Capstone Machine Learning Project. All rights reserved.
-  </footer>
+  <!-- Stlite App Mount Point -->
+  <div id="root"></div>
+
+  <script type="module">
+    import { mount } from "https://cdn.jsdelivr.net/npm/@stlite/browser@1.8.1/build/stlite.js";
+
+    const statusEl = document.getElementById("loading-status");
+    const loadingScreen = document.getElementById("loading-screen");
+
+    function updateStatus(msg) {
+      if (statusEl) statusEl.textContent = msg;
+    }
+
+    // ─── Step 1: Fetch the manifest ─────────────────────────────────────
+    updateStatus("Downloading application manifest...");
+    const manifestResp = await fetch("./stlite_build/manifest.json");
+    const manifest = await manifestResp.json();
+
+    // ─── Step 2: Build the files dictionary for stlite ──────────────────
+    updateStatus("Preparing source files...");
+    const files = {};
+
+    // Text files (Python source, CSV data, TOML configs)
+    for (const [path, content] of Object.entries(manifest.text_files)) {
+      files[path] = content;
+    }
+
+    // Binary files (model artifacts, images) — decode from base64 to Uint8Array
+    for (const [path, b64] of Object.entries(manifest.binary_files)) {
+      const binaryStr = atob(b64);
+      const bytes = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) {
+        bytes[i] = binaryStr.charCodeAt(i);
+      }
+      files[path] = { data: bytes };
+    }
+
+    // ─── Step 3: Mount the Streamlit application ────────────────────────
+    updateStatus("Starting Streamlit engine...");
+
+    await mount(
+      {
+        requirements: [
+          "numpy",
+          "pandas",
+          "scikit-learn",
+          "scipy",
+          "matplotlib",
+          "seaborn",
+          "joblib",
+          "Pillow",
+        ],
+        entrypoint: "app/streamlit_app.py",
+        files: files,
+      },
+      document.getElementById("root"),
+      {
+        onProgress: (message) => {
+          updateStatus(message.text || "Loading...");
+        },
+        onLoad: () => {
+          // Hide loading screen with fade animation
+          loadingScreen.classList.add("fade-out");
+          setTimeout(() => {
+            loadingScreen.style.display = "none";
+          }, 600);
+        },
+      }
+    );
+  </script>
 </body>
 </html>
