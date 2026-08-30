@@ -6,11 +6,11 @@
     "test_samples": 1057,
     "features_count": 41,
     "decision_threshold": 0.5,
-    "timestamp": "2026-08-30 22:08:32"
+    "timestamp": "2026-08-30 22:11:29"
   },
   "custom_numpy_model": {
-    "training_time_ms": 362.58,
-    "inference_latency_ms_per_1k": 0.04,
+    "training_time_ms": 300.8,
+    "inference_latency_ms_per_1k": 0.025,
     "epochs_trained": 175,
     "best_epoch": 125,
     "train_metrics": {
@@ -93,8 +93,8 @@
     }
   },
   "sklearn_benchmark_model": {
-    "training_time_ms": 37.74,
-    "inference_latency_ms_per_1k": 0.378,
+    "training_time_ms": 20.89,
+    "inference_latency_ms_per_1k": 0.156,
     "solver": "lbfgs",
     "train_metrics": {
       "threshold": 0.5,
