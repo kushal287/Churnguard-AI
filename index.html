@@ -9,195 +9,347 @@
   <link rel="shortcut icon" type="image/x-icon" href="./app/assets/favicon.ico" />
   <link rel="apple-touch-icon" href="./app/assets/logo.png" />
 
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/@stlite/browser@1.8.1/build/style.css"
-  />
-
   <style>
+    /* Critical Inline CSS - Zero network delay, immediate first paint */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; overflow: hidden; }
+    html, body {
+      height: 100%;
+      width: 100%;
+      background-color: #F8FAFC;
+      color: #0F172A;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
 
-    /* Premium loading screen */
     #loading-screen {
       position: fixed;
       inset: 0;
-      z-index: 99999;
+      z-index: 999999;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 50%, #E0F2FE 100%);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      transition: opacity 0.5s ease;
+      background: radial-gradient(circle at 50% 20%, #FFFFFF 0%, #F0F7FF 60%, #E0F2FE 100%);
+      padding: 24px;
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    #loading-screen.fade-out { opacity: 0; pointer-events: none; }
+    #loading-screen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-card {
+      background: #FFFFFF;
+      border: 1px solid #BAE6FD;
+      border-radius: 20px;
+      padding: 40px 36px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 12px 36px rgba(37, 99, 235, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .loading-logo-wrapper {
+      position: relative;
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 20px auto;
+    }
 
     .loading-logo {
-      width: 88px; height: 88px;
+      width: 84px;
+      height: 84px;
       border-radius: 18px;
-      border: 2px solid #BAE6FD;
-      padding: 8px;
+      border: 2px solid #93C5FD;
+      padding: 6px;
       background: #FFFFFF;
-      box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12);
-      animation: logoPulse 2s infinite ease-in-out;
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
+      animation: pulseFloat 2.5s ease-in-out infinite;
     }
 
-    @keyframes logoPulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12); }
-      50% { transform: scale(1.04); box-shadow: 0 12px 40px rgba(37, 99, 235, 0.2); }
+    .pulse-ring {
+      position: absolute;
+      inset: -6px;
+      border-radius: 24px;
+      border: 2px solid rgba(37, 99, 235, 0.3);
+      animation: ringExpand 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+    }
+
+    @keyframes pulseFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-4px) scale(1.03); }
+    }
+
+    @keyframes ringExpand {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 0; }
+      100% { transform: scale(0.95); opacity: 0; }
     }
 
     .loading-title {
-      margin-top: 22px;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       color: #0F172A;
       letter-spacing: -0.5px;
+      margin-bottom: 6px;
     }
+
     .loading-subtitle {
-      margin-top: 8px;
-      font-size: 14px;
+      font-size: 13px;
       color: #475569;
-    }
-
-    .loading-bar-container {
-      margin-top: 28px;
-      width: 280px;
-      height: 6px;
-      background: #E2E8F0;
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    .loading-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #2563EB, #06B6D4);
-      border-radius: 6px;
-      animation: loadProgress 12s ease-out forwards;
-    }
-    @keyframes loadProgress {
-      0% { width: 0%; }
-      15% { width: 20%; }
-      40% { width: 45%; }
-      60% { width: 60%; }
-      80% { width: 78%; }
-      95% { width: 90%; }
-      100% { width: 95%; }
-    }
-
-    .loading-status {
-      margin-top: 14px;
-      font-size: 12px;
-      color: #64748B;
+      margin-bottom: 24px;
       font-weight: 500;
     }
 
-    .loading-features {
-      margin-top: 32px;
-      display: flex;
-      gap: 14px;
-    }
-    .loading-feature {
-      background: #FFFFFF;
-      border: 1px solid #E2E8F0;
-      border-radius: 10px;
-      padding: 10px 16px;
-      font-size: 12px;
-      color: #334155;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    /* Dynamic progress container */
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #E2E8F0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      position: relative;
     }
 
-    /* stlite app container */
-    #root { height: 100vh; }
+    .progress-fill {
+      height: 100%;
+      width: 5%;
+      background: linear-gradient(90deg, #2563EB 0%, #06B6D4 100%);
+      border-radius: 8px;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1E293B;
+      margin-bottom: 20px;
+    }
+
+    .status-text {
+      color: #2563EB;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .spinner-dot {
+      width: 6px;
+      height: 6px;
+      background-color: #2563EB;
+      border-radius: 50%;
+      animation: blink 1s infinite alternate;
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.2; }
+      100% { opacity: 1; }
+    }
+
+    .step-badges {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .step-badge {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 11px;
+      color: #64748B;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .step-badge.active {
+      background: #EFF6FF;
+      border-color: #93C5FD;
+      color: #1D4ED8;
+      font-weight: 600;
+    }
+
+    .step-badge.done {
+      background: #ECFDF5;
+      border-color: #A7F3D0;
+      color: #065F46;
+    }
+
+    #root {
+      height: 100vh;
+      width: 100vw;
+    }
   </style>
+
+  <!-- Non-blocking style injection for stlite -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@stlite/browser@1.8.1/build/style.css"
+    media="print"
+    onload="this.media='all'"
+  />
 </head>
 <body>
-  <!-- Loading Screen -->
+  <!-- Instant Loading Screen with Live Progress Indicator -->
   <div id="loading-screen">
-    <img src="./app/assets/logo.png" alt="ChurnGuard AI" class="loading-logo" />
-    <div class="loading-title">ChurnGuard AI</div>
-    <div class="loading-subtitle">Initializing Explainable ML Engine...</div>
-    <div class="loading-bar-container">
-      <div class="loading-bar"></div>
-    </div>
-    <div class="loading-status" id="loading-status">Loading Python runtime...</div>
-    <div class="loading-features">
-      <div class="loading-feature">⚙️ NumPy ML Engine</div>
-      <div class="loading-feature">🧬 Log-Odds Waterfall</div>
-      <div class="loading-feature">📊 Executive Analytics</div>
+    <div class="loading-card">
+      <div class="loading-logo-wrapper">
+        <div class="pulse-ring"></div>
+        <img
+          src="data:image/png;base64,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"
+          alt="ChurnGuard AI"
+          class="loading-logo"
+        />
+      </div>
+      <div class="loading-title">ChurnGuard AI</div>
+      <div class="loading-subtitle">Explainable Customer Retention Intelligence</div>
+
+      <!-- Real-time Progress Bar -->
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-bar"></div>
+      </div>
+
+      <div class="status-row">
+        <span class="status-text">
+          <span class="spinner-dot"></span>
+          <span id="status-msg">Booting WebAssembly engine...</span>
+        </span>
+        <span id="progress-percent" style="color: #64748B;">15%</span>
+      </div>
+
+      <!-- Live Execution Step Badges -->
+      <div class="step-badges">
+        <div class="step-badge active" id="step-wasm">⚡ WebAssembly VM</div>
+        <div class="step-badge" id="step-numpy">⚙️ NumPy LR Core</div>
+        <div class="step-badge" id="step-data">📁 Dataset & Artifacts</div>
+        <div class="step-badge" id="step-ui">📊 Streamlit UI</div>
+      </div>
     </div>
   </div>
 
-  <!-- Stlite App Mount Point -->
+  <!-- Streamlit App Mount Container -->
   <div id="root"></div>
 
+  <!-- App Bootstrap Script -->
   <script type="module">
-    import { mount } from "https://cdn.jsdelivr.net/npm/@stlite/browser@1.8.1/build/stlite.js";
-
-    const statusEl = document.getElementById("loading-status");
+    const progressBar = document.getElementById("progress-bar");
+    const progressPercent = document.getElementById("progress-percent");
+    const statusMsg = document.getElementById("status-msg");
     const loadingScreen = document.getElementById("loading-screen");
 
-    function updateStatus(msg) {
-      if (statusEl) statusEl.textContent = msg;
+    const stepWasm = document.getElementById("step-wasm");
+    const stepNumpy = document.getElementById("step-numpy");
+    const stepData = document.getElementById("step-data");
+    const stepUi = document.getElementById("step-ui");
+
+    function setProgress(pct, msg) {
+      if (progressBar) progressBar.style.width = pct + "%";
+      if (progressPercent) progressPercent.textContent = pct + "%";
+      if (statusMsg && msg) statusMsg.textContent = msg;
     }
 
-    // ─── Step 1: Fetch the manifest ─────────────────────────────────────
-    updateStatus("Downloading application manifest...");
-    const manifestResp = await fetch("./stlite_build/manifest.json");
-    const manifest = await manifestResp.json();
-
-    // ─── Step 2: Build the files dictionary for stlite ──────────────────
-    updateStatus("Preparing source files...");
-    const files = {};
-
-    // Text files (Python source, CSV data, TOML configs)
-    for (const [path, content] of Object.entries(manifest.text_files)) {
-      files[path] = content;
-    }
-
-    // Binary files (model artifacts, images) — decode from base64 to Uint8Array
-    for (const [path, b64] of Object.entries(manifest.binary_files)) {
-      const binaryStr = atob(b64);
-      const bytes = new Uint8Array(binaryStr.length);
-      for (let i = 0; i < binaryStr.length; i++) {
-        bytes[i] = binaryStr.charCodeAt(i);
+    // Smooth progress simulation for initial loading
+    let currentPct = 15;
+    const progressInterval = setInterval(() => {
+      if (currentPct < 85) {
+        currentPct += 2;
+        if (currentPct > 30 && currentPct < 55) {
+          stepWasm.className = "step-badge done";
+          stepNumpy.className = "step-badge active";
+        } else if (currentPct >= 55 && currentPct < 75) {
+          stepNumpy.className = "step-badge done";
+          stepData.className = "step-badge active";
+        } else if (currentPct >= 75) {
+          stepData.className = "step-badge done";
+          stepUi.className = "step-badge active";
+        }
+        setProgress(currentPct);
       }
-      files[path] = { data: bytes };
-    }
+    }, 180);
 
-    // ─── Step 3: Mount the Streamlit application ────────────────────────
-    updateStatus("Starting Streamlit engine...");
+    try {
+      // Step 1: Import stlite from CDN
+      setProgress(25, "Loading Streamlit WebAssembly module...");
+      const { mount } = await import("https://cdn.jsdelivr.net/npm/@stlite/browser@1.8.1/build/stlite.js");
 
-    await mount(
-      {
-        requirements: [
-          "numpy",
-          "pandas",
-          "scikit-learn",
-          "scipy",
-          "matplotlib",
-          "seaborn",
-          "joblib",
-          "Pillow",
-        ],
-        entrypoint: "app/streamlit_app.py",
-        files: files,
-      },
-      document.getElementById("root"),
-      {
-        onProgress: (message) => {
-          updateStatus(message.text || "Loading...");
-        },
-        onLoad: () => {
-          // Hide loading screen with fade animation
-          loadingScreen.classList.add("fade-out");
-          setTimeout(() => {
-            loadingScreen.style.display = "none";
-          }, 600);
-        },
+      // Step 2: Fetch manifest
+      setProgress(45, "Loading application manifest & model weights...");
+      stepWasm.className = "step-badge done";
+      stepNumpy.className = "step-badge active";
+      
+      const manifestResp = await fetch("./stlite_build/manifest.json");
+      const manifest = await manifestResp.json();
+
+      // Step 3: Parse files
+      setProgress(65, "Mounting virtual memory file system...");
+      stepNumpy.className = "step-badge done";
+      stepData.className = "step-badge active";
+
+      const files = {};
+      for (const [path, content] of Object.entries(manifest.text_files)) {
+        files[path] = content;
       }
-    );
+      for (const [path, b64] of Object.entries(manifest.binary_files)) {
+        const binaryStr = atob(b64);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) {
+          bytes[i] = binaryStr.charCodeAt(i);
+        }
+        files[path] = { data: bytes };
+      }
+
+      // Step 4: Mount application
+      setProgress(85, "Starting ChurnGuard AI engine...");
+      stepData.className = "step-badge done";
+      stepUi.className = "step-badge active";
+
+      await mount(
+        {
+          requirements: [
+            "numpy",
+            "pandas",
+            "scikit-learn",
+            "joblib",
+            "Pillow",
+          ],
+          entrypoint: "app/streamlit_app.py",
+          files: files,
+        },
+        document.getElementById("root"),
+        {
+          onProgress: (progress) => {
+            if (progress && progress.text) {
+              statusMsg.textContent = progress.text;
+            }
+          },
+          onLoad: () => {
+            clearInterval(progressInterval);
+            stepUi.className = "step-badge done";
+            setProgress(100, "Engine Ready! Launching dashboard...");
+            setTimeout(() => {
+              loadingScreen.classList.add("fade-out");
+              setTimeout(() => {
+                loadingScreen.style.display = "none";
+              }, 500);
+            }, 300);
+          },
+        }
+      );
+    } catch (err) {
+      clearInterval(progressInterval);
+      console.error("Boot error:", err);
+      if (statusMsg) {
+        statusMsg.textContent = "Loading error. Retrying...";
+      }
+    }
   </script>
 </body>
 </html>
