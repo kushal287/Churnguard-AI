@@ -257,13 +257,18 @@ def render_single_prediction_view():
 
     with exp_col1:
         st.markdown("#### 🔴 Top Risk Drivers (Pushes Churn Risk UP)")
-        if explanation["risk_drivers"]:
+        if explanation.get("risk_drivers") is not None and len(explanation["risk_drivers"]) > 0:
             df_drivers = pd.DataFrame(explanation["risk_drivers"])
+            feat_col = "Feature" if "Feature" in df_drivers.columns else ("feature" if "feature" in df_drivers.columns else df_drivers.columns[0])
+            val_col = "TransformedValue" if "TransformedValue" in df_drivers.columns else ("feature_value" if "feature_value" in df_drivers.columns else df_drivers.columns[1])
+            w_col = "Weight" if "Weight" in df_drivers.columns else ("weight" if "weight" in df_drivers.columns else df_drivers.columns[2])
+            c_col = "LogOddsContribution" if "LogOddsContribution" in df_drivers.columns else ("contribution" if "contribution" in df_drivers.columns else df_drivers.columns[3])
+
             df_display_drivers = pd.DataFrame({
-                "Model Feature": df_drivers["feature"],
-                "Transformed Input (x)": df_drivers["feature_value"].apply(lambda v: f"{v:.3f}"),
-                "Model Weight (w)": df_drivers["weight"].apply(lambda v: f"{v:+.4f}"),
-                "Log-Odds Contribution (+z)": df_drivers["contribution"].apply(lambda v: f"+{v:.4f}"),
+                "Model Feature": df_drivers[feat_col],
+                "Transformed Input (x)": df_drivers[val_col].apply(lambda v: f"{float(v):.3f}" if isinstance(v, (int, float, np.number)) else str(v)),
+                "Model Weight (w)": df_drivers[w_col].apply(lambda v: f"{float(v):+.4f}" if isinstance(v, (int, float, np.number)) else str(v)),
+                "Log-Odds Contribution (+z)": df_drivers[c_col].apply(lambda v: f"+{float(v):.4f}" if isinstance(v, (int, float, np.number)) else str(v)),
             })
             st.table(df_display_drivers)
         else:
@@ -271,13 +276,18 @@ def render_single_prediction_view():
 
     with exp_col2:
         st.markdown("#### 🟢 Top Protective Factors (Pushes Churn Risk DOWN)")
-        if explanation["protective_factors"]:
+        if explanation.get("protective_factors") is not None and len(explanation["protective_factors"]) > 0:
             df_anchors = pd.DataFrame(explanation["protective_factors"])
+            feat_col = "Feature" if "Feature" in df_anchors.columns else ("feature" if "feature" in df_anchors.columns else df_anchors.columns[0])
+            val_col = "TransformedValue" if "TransformedValue" in df_anchors.columns else ("feature_value" if "feature_value" in df_anchors.columns else df_anchors.columns[1])
+            w_col = "Weight" if "Weight" in df_anchors.columns else ("weight" if "weight" in df_anchors.columns else df_anchors.columns[2])
+            c_col = "LogOddsContribution" if "LogOddsContribution" in df_anchors.columns else ("contribution" if "contribution" in df_anchors.columns else df_anchors.columns[3])
+
             df_display_anchors = pd.DataFrame({
-                "Model Feature": df_anchors["feature"],
-                "Transformed Input (x)": df_anchors["feature_value"].apply(lambda v: f"{v:.3f}"),
-                "Model Weight (w)": df_anchors["weight"].apply(lambda v: f"{v:+.4f}"),
-                "Log-Odds Contribution (-z)": df_anchors["contribution"].apply(lambda v: f"{v:.4f}"),
+                "Model Feature": df_anchors[feat_col],
+                "Transformed Input (x)": df_anchors[val_col].apply(lambda v: f"{float(v):.3f}" if isinstance(v, (int, float, np.number)) else str(v)),
+                "Model Weight (w)": df_anchors[w_col].apply(lambda v: f"{float(v):+.4f}" if isinstance(v, (int, float, np.number)) else str(v)),
+                "Log-Odds Contribution (-z)": df_anchors[c_col].apply(lambda v: f"{float(v):.4f}" if isinstance(v, (int, float, np.number)) else str(v)),
             })
             st.table(df_display_anchors)
         else:

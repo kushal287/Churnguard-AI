@@ -65,6 +65,8 @@ st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+    @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
     
     /* Core Typography & Light Theme Canvas */
     html, body, .stApp {
@@ -75,8 +77,18 @@ st.markdown(
     }
     
     /* Ensure icon fonts are never overridden by Inter font */
-    [data-testid="stIconMaterial"], [class*="material-icons"], [class*="material-symbols"], i, [data-testid="stExpanderToggleIcon"] {
+    [data-testid="stIconMaterial"], .material-symbols-rounded, .material-symbols-outlined, [data-testid="stExpanderToggleIcon"] {
         font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Icons', sans-serif !important;
+        font-weight: normal !important;
+        font-style: normal !important;
+        display: inline-block !important;
+        line-height: 1 !important;
+        text-transform: none !important;
+        letter-spacing: normal !important;
+        word-wrap: normal !important;
+        white-space: nowrap !important;
+        direction: ltr !important;
+        -webkit-font-smoothing: antialiased !important;
     }
 
     code, pre, .mono-font {
@@ -292,6 +304,17 @@ st.markdown(
         border-radius: 12px !important;
         box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03) !important;
         margin-bottom: 16px !important;
+    }
+
+    div[data-testid="stExpander"] details summary {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    div[data-testid="stExpander"] details summary p {
+        margin: 0 !important;
+        display: inline-block !important;
     }
     
     /* Tabs */
